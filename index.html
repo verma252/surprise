@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Happy Birthday Surprise!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #f5f6fa 0%, #e7eafc 100%);
+      font-family: 'Roboto', Arial, sans-serif;
+      color: #31344b;
+      margin: 0;
+    }
+    .container {
+      max-width: 500px;
+      margin: 48px auto 24px auto;
+      background: #fff;
+      box-shadow: 0 8px 32px 0 rgba(31,38,135,0.10);
+      border-radius: 18px;
+      padding: 36px 22px 22px 22px;
+      display: none; /* Hidden until surprise begins */
+    }
+    .begin-btn-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .begin-btn {
+      background: linear-gradient(90deg, #ffdf6c, #ffe9af);
+      color: #6b5301;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.3em;
+      font-weight: bold;
+      padding: 16px 38px;
+      box-shadow: 0 2px 12px #ffecb3a5;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: background 0.2s, color 0.2s;
+      outline: none;
+    }
+    .begin-btn:hover {
+      background: #e2b93b;
+      color: #fff;
+    }
+    .banner {
+      background: linear-gradient(90deg,#ffdf6c 60%,#e7eafc 100%);
+      color: #6b5301;
+      font-size: 2.3em;
+      padding: 30px 0 20px 0;
+      border-radius: 12px 12px 0 0;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      text-shadow: 0 2px 10px #fff4cb;
+    }
+    .message {
+      font-size: 1.08em;
+      margin: 12px 0 26px 0;
+      color: #4d4e61;
+      text-align: center;
+    }
+    .slider-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 18px 0 8px 0;
+      margin-bottom: 22px;
+    }
+    .photo-slider {
+      width: 96%;
+      max-width: 340px;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 2px 14px #e6e6ff;
+      transition: opacity 0.6s;
+      cursor: pointer;
+    }
+    .slider-controls {
+      margin-top: 10px;
+    }
+    .slider-btn {
+      background: #fff;
+      color: #a18222;
+      border: 1.5px solid #e2b93b;
+      border-radius: 7px;
+      font-size: 1em;
+      padding: 7px 22px;
+      margin: 0 8px;
+      cursor: pointer;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .slider-btn:hover {
+      background: #ffefbb;
+      color: #6b5301;
+      border-color: #ffdf6c;
+    }
+    .footer {
+      text-align: center;
+      margin: 18px 0 0 0;
+      font-size: 0.98em;
+      color: #aca295;
+      padding-bottom: 8px;
+    }
+    @media (max-width: 600px){
+      .container {padding: 13px 3vw;}
+      .photo-slider {max-width: 97vw;}
+    }
+    /* ENLARGE EFFECT STYLES */
+    .photo-slider.enlarged {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) !important;
+      max-width: 90vw !important;
+      max-height: 90vh !important;
+      height: auto !important;
+      width: auto !important;
+      box-shadow: 0 0 20px #333;
+      z-index: 1001;
+      cursor: zoom-out;
+      border-radius: 12px;
+      opacity: 1 !important;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      display: none;
+    }
+    .overlay.active {
+      display: block;
+    }
+    /* NEW SURPRISE BUTTON CONTAINER */
+    .surprise-btn-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Button View -->
+  <div class="begin-btn-container" id="btnView">
+    <button class="begin-btn" onclick="startSurprise()">Begin Your Surprise</button>
+  </div>
+
+  <!-- Hidden Surprise Content -->
+  <div class="container" id="surpriseContent">
+    <div class="banner">🎉 Happy Birthday,Urvi 🎉</div>
+    <!-- Background Music -->
+    <audio id="birthdayMusic" src="file:///C:/Users/PC/Downloads/happy-birthday-357371.mp3" autoplay loop aria-label="Birthday Music"></audio>
+    <div class="message">
+      Wishing you a fantastic birthday filled with joy, warmth, and wonderful memories.<br />
+      Today is all about <b>celebrating you</b> and the happiness you bring.
+    </div>
+
+    <!-- Overlay for enlarged photo -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Photo Slider Start -->
+    <div class="slider-container">
+      <img
+        id="sliderImg"
+        class="photo-slider"
+        src="https://images.pexels.com/photos/2072181/pexels-photo-2072181.jpeg"
+        alt="Birthday Memory Slider"
+      />
+      <div class="slider-controls">
+        <button class="slider-btn" onclick="prevPhoto()" title="Previous photo">&#8592; Prev</button>
+        <button class="slider-btn" onclick="nextPhoto()" title="Next photo">Next &#8594;</button>
+      </div>
+    </div>
+    <!-- Photo Slider End -->
+
+    <!-- NEW Surprise Button -->
+    <div class="surprise-btn-container">
+      <button class="begin-btn" onclick="openSurprisePage()">Surprise</button>
+    </div>
+
+    <div class="footer">
+      Made with love for your special day · Crafted with care.
+    </div>
+  </div>
+
+  <script>
+    // Reveal the surprise section and hide the button view, then play music
+    function startSurprise() {
+      document.getElementById('btnView').style.display = 'none';
+      document.getElementById('surpriseContent').style.display = 'block';
+      // Play music after user interaction (modern browser compliant)
+      const audio = document.getElementById('birthdayMusic');
+      if (audio) {
+        audio.play().catch(() => {});
+      }
+    }
+
+    // Photo slider logic with fade transition
+    const photoLinks = [
+      'https://images.pexels.com/photos/2072181/pexels-photo-2072181.jpeg',
+      'https://images.pexels.com/photos/1721934/pexels-photo-1721934.jpeg',
+      'https://images.pexels.com/photos/461382/pexels-photo-461382.jpeg',
+      'https://images.pexels.com/photos/169667/pexels-photo-169667.jpeg',
+      'https://images.pexels.com/photos/1028726/pexels-photo-1028726.jpeg',
+      // Add your custom photo links
+    ];
+    let currentIndex = 0;
+    const img = document.getElementById('sliderImg');
+    function showPhoto(idx) {
+      img.style.opacity = 0;
+      setTimeout(() => {
+        img.src = photoLinks[idx];
+        img.style.opacity = 1;
+      }, 400);
+    }
+    function nextPhoto() {
+      currentIndex = (currentIndex + 1) % photoLinks.length;
+      showPhoto(currentIndex);
+    }
+    function prevPhoto() {
+      currentIndex = (currentIndex - 1 + photoLinks.length) % photoLinks.length;
+      showPhoto(currentIndex);
+    }
+    window.onload = function () {
+      showPhoto(currentIndex); // Initialize first photo
+    };
+
+    // ENLARGE ON CLICK LOGIC
+    const sliderImg = document.getElementById('sliderImg');
+    const overlay = document.getElementById('overlay');
+    sliderImg.addEventListener('click', () => {
+      sliderImg.classList.toggle('enlarged');
+      overlay.classList.toggle('active');
+    });
+    overlay.addEventListener('click', () => {
+      sliderImg.classList.remove('enlarged');
+      overlay.classList.remove('active');
+    });
+
+    // OPEN NEW PAGE ON SURPRISE BUTTON CLICK
+    function openSurprisePage() {
+      window.open('nextpage.html', '_blank'); // नया टैब में खुलेगा
+      // अगर उसी टैब में खोलना हो तो नीचे वाली लाइन उपयोग करें:
+      // window.location.href = 'nextpage.html';
+    }
+  </script>
+</body>
+</html>
